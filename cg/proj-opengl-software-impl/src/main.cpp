@@ -1,15 +1,8 @@
-/* textures.c ... */
-
-/*
- * This example creates an SDL window and renderer, and then draws some
- * textures to it every frame.
- *
- * This code is public domain. Feel free to use it for any purpose!
- */
-
 #define SDL_MAIN_USE_CALLBACKS 1  /* use the callbacks instead of main() */
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
+
+#include "app.h"
 
  /* We will use this renderer to draw into this window every frame. */
 static SDL_Window* window = NULL;
@@ -19,10 +12,11 @@ static uint32_t* pixels = NULL;
 static int texture_width = 0;
 static int texture_height = 0;
 
+static Application* app;
+
 #define WINDOW_WIDTH 1200
 #define WINDOW_HEIGHT 800
 
-/* This function runs once at startup. */
 SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[])
 {
     SDL_Surface* surface = NULL;
@@ -40,33 +34,6 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[])
         return SDL_APP_FAILURE;
     }
 
-    /* Textures are pixel data that we upload to the video hardware for fast drawing. Lots of 2D
-       engines refer to these as "sprites." We'll do a static texture (upload once, draw many
-       times) with data from a bitmap file. */
-
-       /* SDL_Surface is pixel data the CPU can access. SDL_Texture is pixel data the GPU can access.
-          Load a .bmp into a surface, move it to a texture from there. */
-    //SDL_asprintf(&bmp_path, "%ssample.bmp", SDL_GetBasePath());  /* allocate a string of the full file path */
-    //surface = SDL_LoadBMP(bmp_path);
-    //if (!surface) {
-    //    SDL_Log("Couldn't load bitmap: %s", SDL_GetError());
-    //    return SDL_APP_FAILURE;
-    //}
-
-    //SDL_free(bmp_path);  /* done with this, the file is loaded. */
-
-    //texture_width = surface->w;
-    //texture_height = surface->h;
-
-    //texture = SDL_CreateTextureFromSurface(renderer, surface);
-    //if (!texture) {
-    //    SDL_Log("Couldn't create static texture: %s", SDL_GetError());
-    //    return SDL_APP_FAILURE;
-    //}
-
-    //SDL_DestroySurface(surface);  /* done with this, the texture has a copy of the pixels now. */
-
-
     texture = SDL_CreateTexture(
         renderer,
         SDL_PIXELFORMAT_RGBA8888,
@@ -75,7 +42,11 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[])
         WINDOW_HEIGHT
     );
 
-    pixels = malloc(WINDOW_WIDTH * WINDOW_HEIGHT * sizeof(uint32_t));
+    pixels = (uint32_t*)malloc(WINDOW_WIDTH * WINDOW_HEIGHT * sizeof(uint32_t));
+
+
+
+
 
     return SDL_APP_CONTINUE;  /* carry on with the program! */
 }
@@ -92,12 +63,12 @@ SDL_AppResult SDL_AppEvent(void* appstate, SDL_Event* event)
 void generate_pixels(uint32_t* pixels, int width, int height, uint32_t time) {
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
-            // 创建动态颜色（随时间变化）
+            // 鍒涘缓鍔ㄦ�侀鑹诧紙闅忔椂闂村彉鍖栵級
             uint8_t r = (x + time) % 256;
             uint8_t g = (y + time) % 256;
             uint8_t b = (time * 2) % 256;
 
-            // 将颜色打包为RGBA32格式
+            // 灏嗛鑹叉墦鍖呬负RGBA32鏍煎紡
             pixels[y * width + x] = (r << 24) | (g << 16) | (b << 8) | 0xFF;
         }
     }
@@ -117,45 +88,21 @@ SDL_AppResult SDL_AppIterate(void* appstate)
 
 
     frame_count++;
-    // 生成新的像素数据
+    // 鐢熸垚鏂扮殑鍍忕礌鏁版嵁
     generate_pixels(pixels, WINDOW_WIDTH, WINDOW_HEIGHT, frame_count);
 
-    // 更新纹理
+    // 鏇存柊绾圭悊
     SDL_UpdateTexture(
         texture,
-        NULL,  // 更新整个纹理
+        NULL,  // 鏇存柊鏁翠釜绾圭悊
         pixels,
-        WINDOW_WIDTH * sizeof(uint32_t)  // 每行的字节数
+        WINDOW_WIDTH * sizeof(uint32_t)  // 姣忚鐨勫瓧鑺傛暟
     );
 
-    // 渲染
+    // 娓叉煋
     SDL_RenderClear(renderer);
     SDL_RenderTexture(renderer, texture, NULL, NULL);
-    SDL_RenderPresent(renderer);
-
-
-
-
-    ///* as you can see from this, rendering draws over whatever was drawn before it. */
-    //SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);  /* black, full alpha */
-    //SDL_RenderClear(renderer);  /* start with a blank canvas. */
-
-    ///* Just draw the static texture a few times. You can think of it like a
-    //   stamp, there isn't a limit to the number of times you can draw with it. */
-
-    //   /* top left */
-    //dst_rect.x = (100.0f * scale);
-    //dst_rect.y = 0.0f;
-    //dst_rect.w = (float)texture_width;
-    //dst_rect.h = (float)texture_height;
-    //SDL_RenderTexture(renderer, texture, NULL, &dst_rect);
-
-    ///* center this one. */
-    //dst_rect.x = ((float)(WINDOW_WIDTH - texture_width)) / 2.0f;
-    //dst_rect.y = ((float)(WINDOW_HEIGHT - texture_height)) / 2.0f;
-    //dst_rect.w = (float)texture_width;
-    //dst_rect.h = (float)texture_height;
-    //SDL_RenderTexture(renderer, texture, NULL, &dst_rect);
+    SDL_RenderPresent(renderer); /* put it all on the screen! */
 
     ///* bottom right. */
     //dst_rect.x = ((float)(WINDOW_WIDTH - texture_width)) - (100.0f * scale);
@@ -163,8 +110,6 @@ SDL_AppResult SDL_AppIterate(void* appstate)
     //dst_rect.w = (float)texture_width;
     //dst_rect.h = (float)texture_height;
     //SDL_RenderTexture(renderer, texture, NULL, &dst_rect);
-
-    //SDL_RenderPresent(renderer);  /* put it all on the screen! */
 
     return SDL_APP_CONTINUE;  /* carry on with the program! */
 }
