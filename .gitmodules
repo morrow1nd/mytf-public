@@ -1,0 +1,8 @@
+[submodule "cg/proj-opengl-software-impl/LearnOpenGL"]
+	path = cg/proj-opengl-software-impl/LearnOpenGL
+	url = https://github.com/JoeyDeVries/LearnOpenGL.git
+	branch = master
+[submodule "cg/proj-opengl-software-impl/deps/SDL"]
+	path = cg/proj-opengl-software-impl/deps/SDL
+	url = https://github.com/libsdl-org/SDL.git
+	branch = main
