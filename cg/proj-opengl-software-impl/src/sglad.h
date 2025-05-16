@@ -97,8 +97,9 @@ typedef uint64_t GLsizeiptr;
 #define GL_ACTIVE_TEXTURE 0x84E0
 
 
-typedef void (APIENTRYP PFNGLENABLEPROC)(GLenum cap);
-GLAPI PFNGLENABLEPROC glad_glEnable;
+//typedef void (APIENTRYP PFNGLENABLEPROC)(GLenum cap);
+//GLAPI PFNGLENABLEPROC glad_glEnable;
+void glad_glEnable(GLenum cap);
 #define glEnable glad_glEnable
 
 typedef void (APIENTRYP PFNGLGENVERTEXARRAYSPROC)(GLsizei n, GLuint* arrays);

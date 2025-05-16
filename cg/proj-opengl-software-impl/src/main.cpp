@@ -46,7 +46,7 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[])
     pixels = (uint32_t*)malloc(WINDOW_WIDTH * WINDOW_HEIGHT * sizeof(uint32_t));
 
     app = new Application();
-    app->Init();
+    app->Init(WINDOW_WIDTH, WINDOW_HEIGHT);
 
     return SDL_APP_CONTINUE;  /* carry on with the program! */
 }
@@ -75,6 +75,17 @@ SDL_AppResult SDL_AppIterate(void* appstate)
     frame_count++;
     // 生成新的像素数据
     app->Update(pixels, WINDOW_WIDTH, WINDOW_HEIGHT, frame_count);
+    //for (int y = 0; y < WINDOW_HEIGHT; y++) {
+    //    for (int x = 0; x < WINDOW_WIDTH; x++) {
+    //        // 创建动态颜色（随时间变化）
+    //        uint8_t r = (x + frame_count) % 256;
+    //        uint8_t g = (y + frame_count) % 256;
+    //        uint8_t b = (frame_count * 2) % 256;
+    //
+    //        // 将颜色打包为RGBA32格式
+    //        pixels[y * WINDOW_WIDTH + x] = (r << 24) | (g << 16) | (b << 8) | 0xFF;
+    //    }
+    //}
 
     // 更新纹理
     SDL_UpdateTexture(
@@ -104,5 +115,6 @@ void SDL_AppQuit(void* appstate, SDL_AppResult result)
 {
     app->Release();
     SDL_DestroyTexture(texture);
+    free(pixels);
     /* SDL will clean up the window/renderer for us. */
 }

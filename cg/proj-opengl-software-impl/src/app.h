@@ -2,22 +2,25 @@
 
 #include "camera.h"
 #include "shader_m.h"
-
 #include "sglad.h"
 #include "sglm.hpp"
+#include "sgl.hpp"
 #include "../deps/stb_image.h"
-
-#define CUBE_SIZE 10
+#include "app_shader.hpp"
 
 // LearnOpenGL\src\1.getting_started\7.4.camera_class
+
+#define CUBE_SIZE 10
 
 class Application
 {
 public:
-	void Init() {
+    void Init(int screenWidth, int screenHeight) {
+        sglInit(screenWidth, screenHeight);
+
         glEnable(GL_DEPTH_TEST);
 
-        shader = new Shader("7.4.camera.vs", "7.4.camera.fs");
+        shader = new Shader(AppVertexShader::Create, AppFragmentShader::Create);
 
         // set up vertex data (and buffer(s)) and configure vertex attributes
         // ------------------------------------------------------------------
@@ -138,23 +141,9 @@ public:
         shader->use();
         shader->setInt("texture1", 0);
         shader->setInt("texture2", 1);
-	}
+    }
 
-	void Update(uint32_t* pixels, int width, int height, uint32_t time) {
-        //for (int y = 0; y < height; y++) {
-        //    for (int x = 0; x < width; x++) {
-        //        // 创建动态颜色（随时间变化）
-        //        uint8_t r = (x + time) % 256;
-        //        uint8_t g = (y + time) % 256;
-        //        uint8_t b = (time * 2) % 256;
-
-        //        // 将颜色打包为RGBA32格式
-        //        pixels[y * width + x] = (r << 24) | (g << 16) | (b << 8) | 0xFF;
-        //    }
-        //}
-
-
-
+    void Update(uint32_t* pixels, int width, int height, uint32_t time) {
         int SCR_WIDTH = width;
         int SCR_HEIGHT = height;
 
@@ -193,6 +182,19 @@ public:
         shader->setMat4("view", view);
 
         // render boxes
+        // world space positions of our cubes
+        static glm::vec3 cubePositions[CUBE_SIZE] = {
+            glm::vec3(0.0f,  0.0f,  0.0f),
+            glm::vec3(2.0f,  5.0f, -15.0f),
+            glm::vec3(-1.5f, -2.2f, -2.5f),
+            glm::vec3(-3.8f, -2.0f, -12.3f),
+            glm::vec3(2.4f, -0.4f, -3.5f),
+            glm::vec3(-1.7f,  3.0f, -7.5f),
+            glm::vec3(1.3f, -2.0f, -2.5f),
+            glm::vec3(1.5f,  2.0f, -2.5f),
+            glm::vec3(1.5f,  0.2f, -1.5f),
+            glm::vec3(-1.3f,  1.0f, -1.5f)
+        };
         glBindVertexArray(VAO);
         for (unsigned int i = 0; i < CUBE_SIZE; i++)
         {
@@ -205,16 +207,20 @@ public:
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
-	}
 
-	void Release() {
+        // pull final pixels from sgl
+        sglPullPixels(pixels);
+    }
+
+    void Release() {
         delete shader;
 
         glDeleteVertexArrays(1, &VAO);
         glDeleteBuffers(1, &VBO);
-	}
-private:
+        sglRelease();
+    }
 
+private:
     // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
     // ---------------------------------------------------------------------------------------------------------
     //void processInput(GLFWwindow* window)
@@ -277,24 +283,9 @@ private:
     Camera camera;
     Shader* shader;
     unsigned int VBO, VAO;
+    unsigned int texture1, texture2;
 
     // timing
     float deltaTime = 0.0f;	// time between current frame and last frame
     float lastFrame = 0.0f;
-
-    unsigned int texture1, texture2;
-
-    // world space positions of our cubes
-    glm::vec3 cubePositions[CUBE_SIZE] = {
-        glm::vec3(0.0f,  0.0f,  0.0f),
-        glm::vec3(2.0f,  5.0f, -15.0f),
-        glm::vec3(-1.5f, -2.2f, -2.5f),
-        glm::vec3(-3.8f, -2.0f, -12.3f),
-        glm::vec3(2.4f, -0.4f, -3.5f),
-        glm::vec3(-1.7f,  3.0f, -7.5f),
-        glm::vec3(1.3f, -2.0f, -2.5f),
-        glm::vec3(1.5f,  2.0f, -2.5f),
-        glm::vec3(1.5f,  0.2f, -1.5f),
-        glm::vec3(-1.3f,  1.0f, -1.5f)
-    };
 };
