@@ -8,6 +8,8 @@
 #include "../deps/stb_image.h"
 #include "app_shader.hpp"
 
+#include <iostream>
+
 // LearnOpenGL\src\1.getting_started\7.4.camera_class
 
 #define CUBE_SIZE 10
@@ -20,7 +22,7 @@ public:
 
         glEnable(GL_DEPTH_TEST);
 
-        shader = new Shader(AppVertexShader::Create, AppFragmentShader::Create);
+        shader = new Shader(new AppVertexShader(), new AppFragmentShader());
 
         // set up vertex data (and buffer(s)) and configure vertex attributes
         // ------------------------------------------------------------------

@@ -111,5 +111,5 @@ void sglPullPixels(uint32_t* pixels) {
 }
 
 GLuint sglCreateProgram(sgl::VertexShaderBase* vertexShader, sgl::FragmentShaderBase* fragShader) {
-
+	return 0; // todo
 }

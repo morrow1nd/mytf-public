@@ -14,3 +14,5 @@ add_executable(sgl WIN32 src/main.cpp src/sgl.cpp src/sgl.hpp)
 
 # Link to the actual SDL3 library.
 target_link_libraries(sgl PRIVATE SDL3::SDL3)
+
+add_executable(app src/rgfw.c )
