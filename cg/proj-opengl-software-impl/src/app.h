@@ -9,6 +9,8 @@
 
 #define CUBE_SIZE 10
 
+// LearnOpenGL\src\1.getting_started\7.4.camera_class
+
 class Application
 {
 public:
