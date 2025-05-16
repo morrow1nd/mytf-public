@@ -2,6 +2,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 
+#define STB_IMAGE_IMPLEMENTATION
 #include "app.h"
 
  /* We will use this renderer to draw into this window every frame. */
@@ -44,9 +45,8 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[])
 
     pixels = (uint32_t*)malloc(WINDOW_WIDTH * WINDOW_HEIGHT * sizeof(uint32_t));
 
-
-
-
+    app = new Application();
+    app->Init();
 
     return SDL_APP_CONTINUE;  /* carry on with the program! */
 }
@@ -58,20 +58,6 @@ SDL_AppResult SDL_AppEvent(void* appstate, SDL_Event* event)
         return SDL_APP_SUCCESS;  /* end the program, reporting success to the OS. */
     }
     return SDL_APP_CONTINUE;  /* carry on with the program! */
-}
-
-void generate_pixels(uint32_t* pixels, int width, int height, uint32_t time) {
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            // 创建动态颜色（随时间变化）
-            uint8_t r = (x + time) % 256;
-            uint8_t g = (y + time) % 256;
-            uint8_t b = (time * 2) % 256;
-
-            // 将颜色打包为RGBA32格式
-            pixels[y * width + x] = (r << 24) | (g << 16) | (b << 8) | 0xFF;
-        }
-    }
 }
 
 static uint32_t frame_count = 0;
@@ -86,10 +72,9 @@ SDL_AppResult SDL_AppIterate(void* appstate)
     const float direction = ((now % 2000) >= 1000) ? 1.0f : -1.0f;
     const float scale = ((float)(((int)(now % 1000)) - 500) / 500.0f) * direction;
 
-
     frame_count++;
     // 生成新的像素数据
-    generate_pixels(pixels, WINDOW_WIDTH, WINDOW_HEIGHT, frame_count);
+    app->Update(pixels, WINDOW_WIDTH, WINDOW_HEIGHT, frame_count);
 
     // 更新纹理
     SDL_UpdateTexture(
@@ -117,6 +102,7 @@ SDL_AppResult SDL_AppIterate(void* appstate)
 /* This function runs once at shutdown. */
 void SDL_AppQuit(void* appstate, SDL_AppResult result)
 {
+    app->Release();
     SDL_DestroyTexture(texture);
     /* SDL will clean up the window/renderer for us. */
 }
