@@ -69,7 +69,7 @@ int main(void) {
     screenSize = RGFW_getScreenSize();
 
     app_init(screenSize.w, screenSize.h);
-    char* pixels = NULL;
+    uint32_t* pixels = NULL;
 
     i8 running = 1;
     u32 frames = 0;
