@@ -2,7 +2,6 @@
 #include "app.hpp"
 
 extern "C" {
-
 	static Application app;
 
 	void app_init(uint32_t width, uint32_t height) {
@@ -16,5 +15,4 @@ extern "C" {
 	void app_release() {
 		app.Release();
 	}
-
 }
