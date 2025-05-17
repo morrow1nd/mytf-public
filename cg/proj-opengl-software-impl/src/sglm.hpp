@@ -38,6 +38,7 @@ namespace glm
                 return _vec2(lhs.x + rhs.x, lhs.y + rhs.y);
             }
 
+            // 标量乘
             friend _vec2 operator * (const _vec2& lhs, float s) {
                 return _vec2(lhs.x * s, lhs.y * s);
             }
@@ -73,6 +74,7 @@ namespace glm
                 return *this;
             }
 
+            // 标量乘
             friend _vec3 operator + (const _vec3& lhs, const _vec3& rhs) {
                 return _vec3(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
             }
@@ -100,14 +102,14 @@ namespace glm
             T& operator[](int index) { return value[index]; }
             const T& operator[](int index) const { return value[index]; }
 
-            _vec4& operator+=(const _vec4& rhs) {
+            _vec4& operator += (const _vec4& rhs) {
                 x += rhs.x;
                 y += rhs.y;
                 z += rhs.z;
                 w += rhs.w;
                 return *this;
             }
-            _vec4& operator-=(const _vec4& rhs) {
+            _vec4& operator -= (const _vec4& rhs) {
                 x -= rhs.x;
                 y -= rhs.y;
                 z -= rhs.z;
@@ -119,6 +121,7 @@ namespace glm
                 return _vec4(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z, lhs.w + rhs.w);
             }
 
+            // 标量乘
             friend _vec4 operator * (const _vec4& lhs, float s) {
                 return _vec4(lhs.x * s, lhs.y * s, lhs.z * s, lhs.w * s);
             }
