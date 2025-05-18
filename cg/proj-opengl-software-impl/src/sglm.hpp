@@ -74,13 +74,19 @@ namespace glm
                 return *this;
             }
 
-            // 标量乘
             friend _vec3 operator + (const _vec3& lhs, const _vec3& rhs) {
                 return _vec3(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
             }
+            friend _vec3 operator - (const _vec3& lhs, const _vec3& rhs) {
+                return _vec3(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
+            }
 
+            // 标量乘
             friend _vec3 operator * (const _vec3& lhs, float s) {
                 return _vec3(lhs.x * s, lhs.y * s, lhs.z * s);
+            }
+            friend _vec3 operator * (float s, const _vec3& rhs) {
+                return _vec3(rhs.x * s, rhs.y * s, rhs.z * s);
             }
         };
 
@@ -135,12 +141,27 @@ namespace glm
             col_type columns[4];
 
         public:
-            _mat4(T v) {
-                for (int i = 0; i < 4; ++i) {
-                    columns[i] = _vec4<T>(v);
-                }
+            // ok
+            _mat4() {
+                columns[0] = col_type(1, 0, 0, 0);
+                columns[1] = col_type(0, 1, 0, 0);
+                columns[2] = col_type(0, 0, 1, 0);
+                columns[3] = col_type(0, 0, 0, 1);
             }
 
+            // ok
+            _mat4(T v) {
+                columns[0] = col_type(v, 0, 0, 0);
+                columns[1] = col_type(0, v, 0, 0);
+                columns[2] = col_type(0, 0, v, 0);
+                columns[3] = col_type(0, 0, 0, v);
+                // error:
+                //for (int i = 0; i < 4; ++i) {
+                //    columns[i] = _vec4<T>(v);
+                //}
+            }
+
+            // ok
             _mat4(const col_type& col0, const col_type& col1, const col_type& col2, const col_type& col3) {
                 columns[0] = col0;
                 columns[1] = col1;
@@ -151,6 +172,7 @@ namespace glm
             col_type& operator[](size_t index) { return columns[index]; }
             const col_type& operator[](size_t index) const { return columns[index]; }
 
+            // ok
             friend _vec4<T> operator * (const _mat4& lhs, const _vec4<T>& rhs) {
                 // 这两种方式是相同的
                 return lhs[0] * rhs.x + lhs[1] * rhs.y + lhs[2] * rhs.z + lhs[3] * rhs.w;
@@ -216,9 +238,41 @@ namespace glm
         return ret;
     }
 
-    inline mat4 rotate(const mat4& m, float angle, const vec3& axis) {
+    // https://glm.g-truc.net/0.9.9/api/a00247.html#gaee9e865eaa9776370996da2940873fd4
+    // Builds a rotation 4 * 4 matrix created from an axis vector and an angle.
+    // Parameters
+    //    m	    Input matrix multiplied by this rotation matrix.
+    //    angle	Rotation angle expressed in radians.
+    //    axis	Rotation axis, recommended to be normalized.
+    inline mat4 rotate(const mat4& m, float angle, const vec3& _axis) {
+        // 代码是从glm库中拷贝过来的，原理见RTR4 4.2.4章，公式4.30
+        float const a = angle;
+        float const c = cos(a);
+        float const s = sin(a);
 
-        return mat4(0); // todo
+        vec3 axis(normalize(_axis));
+        vec3 temp((1 - c) * axis);
+
+        mat4 Rotate;
+        Rotate[0][0] = c + temp[0] * axis[0];
+        Rotate[0][1] = temp[0] * axis[1] + s * axis[2];
+        Rotate[0][2] = temp[0] * axis[2] - s * axis[1];
+
+        Rotate[1][0] = temp[1] * axis[0] - s * axis[2];
+        Rotate[1][1] = c + temp[1] * axis[1];
+        Rotate[1][2] = temp[1] * axis[2] + s * axis[0];
+
+        Rotate[2][0] = temp[2] * axis[0] + s * axis[1];
+        Rotate[2][1] = temp[2] * axis[1] - s * axis[0];
+        Rotate[2][2] = c + temp[2] * axis[2];
+
+        // 矩阵乘法 m * Rotate
+        mat4 Result;
+        Result[0] = m[0] * Rotate[0][0] + m[1] * Rotate[0][1] + m[2] * Rotate[0][2];
+        Result[1] = m[0] * Rotate[1][0] + m[1] * Rotate[1][1] + m[2] * Rotate[1][2];
+        Result[2] = m[0] * Rotate[2][0] + m[1] * Rotate[2][1] + m[2] * Rotate[2][2];
+        Result[3] = m[3];
+        return Result;
     }
 
     // Build a look at view matrix.
@@ -227,10 +281,30 @@ namespace glm
     //	center	Position where the camera is looking at
     //	up		Normalized up vector, how the camera is oriented. Typically (0, 0, 1)
     inline mat4 lookAt(const vec3& eye, const vec3& center, const vec3& up) {
-        return mat4(0); // todo
+        // RTR4 Chapter 4.1.6 示例
+        vec3 view = normalize(center - eye);
+        vec3 right = normalize(cross(view, up)); // TODO: 如果view和up平行会怎样？
+        vec3 real_up = cross(right, view);
+
+        mat4 translate = mat4(vec4(1, 0, 0, 0), vec4(0, 1, 0, 0), vec4(0, 0, 1, 0), vec4(-eye.x, -eye.y, -eye.z, 1));
+        mat4 rotate = mat4(vec4(right.x, real_up.x, - view.x, 0),
+            vec4(right.y, real_up.y, -view.y, 0),
+            vec4(right.z, real_up.z, - view.z, 0),
+            vec4(0, 0, 0, 1));
+
+        return rotate * translate;
     }
 
     inline mat4 perspective(float fovy, float aspect, float near, float far) {
-        return mat4(0); // todo
+        // 代码是从glm库中拷贝过来的 perspectiveRH_NO
+        float const tanHalfFovy = tan(fovy / 2);
+
+        mat4 Result(0);
+        Result[0][0] = 1 / (aspect * tanHalfFovy);
+        Result[1][1] = 1 / (tanHalfFovy);
+        Result[2][2] = -(far + near) / (far - near);
+        Result[2][3] = -1;
+        Result[3][2] = -(2 * far * near) / (far - near);
+        return Result;
     }
 }

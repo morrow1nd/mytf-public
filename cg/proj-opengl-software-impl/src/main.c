@@ -74,6 +74,7 @@ int main(void) {
     i8 running = 1;
     u32 frames = 0;
     double frameStartTime = RGFW_getTime();
+    double lastFrame = frameStartTime;
 
     while (running) {
         while (RGFW_window_checkEvent(win)) {
@@ -83,6 +84,10 @@ int main(void) {
             }
         }
 
+        double currTime = RGFW_getTime();
+        double deltaTime = currTime - lastFrame;
+        lastFrame = currTime;
+
         u8 color[4] = { 0, 0, 255, 125 };
         u8 color2[4] = { 255, 0, 0, 255 };
         clear(win, color);
@@ -90,7 +95,7 @@ int main(void) {
 
         drawBitmap(win, icon, RGFW_RECT(100, 100, 3, 3));
 
-        app_update(pixels, screenSize.w, screenSize.h);
+        app_update(pixels, screenSize.w, screenSize.h, deltaTime * 1000);
 
         // RGFW_window_swapBuffers could work here too, but I want to ensure only the CPU buffer is being swapped
         RGFW_window_swapBuffers_software(win);

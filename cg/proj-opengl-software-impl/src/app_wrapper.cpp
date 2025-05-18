@@ -8,8 +8,8 @@ extern "C" {
 		app.Init(width, height);
 	}
 	
-	void app_update(uint32_t* pixels, uint32_t width, uint32_t height) {
-		app.Update(pixels, width, height, 0); // todo
+	void app_update(uint32_t* pixels, uint32_t width, uint32_t height, uint32_t time) {
+		app.Update(pixels, width, height, time);
 	}
 	
 	void app_release() {
