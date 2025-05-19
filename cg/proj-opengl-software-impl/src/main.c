@@ -71,7 +71,9 @@ int main(void) {
     screenSize = RGFW_getScreenSize();
 
     app_init(screenSize.w, screenSize.h);
-    uint32_t* pixels = NULL;
+    uint32_t* pixels = malloc(screenSize.w * screenSize.h * 4);
+    if (pixels == NULL)
+        return -1;
 
     i8 running = 1;
     u32 frames = 0;
@@ -90,14 +92,14 @@ int main(void) {
         double deltaTime = currTime - lastFrame;
         lastFrame = currTime;
 
-        u8 color[4] = { 0, 0, 255, 125 };
-        u8 color2[4] = { 255, 0, 0, 255 };
-        clear(win, color);
+        //u8 color[4] = { 0, 0, 255, 125 };
+        //u8 color2[4] = { 255, 0, 0, 255 };
+        //clear(win, color);
         //drawRect(win, RGFW_RECT(200, 200, 200, 200), color2);
-
-        drawBitmap(win, icon, RGFW_RECT(100, 100, 3, 3));
+        //drawBitmap(win, icon, RGFW_RECT(100, 100, 3, 3));
 
         app_update(pixels, screenSize.w, screenSize.h, deltaTime * 1000);
+        memcpy(win->buffer, pixels, 4 * screenSize.w * screenSize.h);
 
         // RGFW_window_swapBuffers could work here too, but I want to ensure only the CPU buffer is being swapped
         RGFW_window_swapBuffers_software(win);
@@ -105,6 +107,7 @@ int main(void) {
         frames++;
     }
 
+    free(pixels);
     app_release();
     RGFW_window_close(win);
     return 0;

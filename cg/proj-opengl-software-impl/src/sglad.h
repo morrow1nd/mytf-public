@@ -150,8 +150,7 @@ typedef void (APIENTRYP PFNGLGENERATEMIPMAPPROC)(GLenum target);
 GLAPI PFNGLGENERATEMIPMAPPROC glad_glGenerateMipmap;
 #define glGenerateMipmap glad_glGenerateMipmap
 
-typedef void (APIENTRYP PFNGLCLEARCOLORPROC)(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
-GLAPI PFNGLCLEARCOLORPROC glad_glClearColor;
+void glad_glClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
 #define glClearColor glad_glClearColor
 
 typedef void (APIENTRYP PFNGLCLEARPROC)(GLbitfield mask);
@@ -216,8 +215,7 @@ GLAPI PFNGLVIEWPORTPROC glad_glViewport;
 //GLAPI PFNGLDELETESHADERPROC glad_glDeleteShader;
 //#define glDeleteShader glad_glDeleteShader
 
-typedef void (APIENTRYP PFNGLUSEPROGRAMPROC)(GLuint program);
-GLAPI PFNGLUSEPROGRAMPROC glad_glUseProgram;
+void glad_glUseProgram(GLuint program);
 #define glUseProgram glad_glUseProgram
 
 typedef GLint(APIENTRYP PFNGLGETUNIFORMLOCATIONPROC)(GLuint program, const GLchar* name);

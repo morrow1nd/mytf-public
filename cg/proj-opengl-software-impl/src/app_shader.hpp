@@ -6,7 +6,7 @@
 #include "sglm.hpp"
 
 class AppVertexShader : public sgl::VertexShaderBase {
-protected:
+public:
     void Init() override {
         uniformModelIndex = RegisterUniformMat4("model");
         uniformViewIndex = RegisterUniformMat4("view");
@@ -45,7 +45,7 @@ private:
 };
 
 class AppFragmentShader : public sgl::FragmentShaderBase {
-protected:
+public:
     void Init() override {
         inTexCoordId = RegisterInVec2("TexCoord");
 

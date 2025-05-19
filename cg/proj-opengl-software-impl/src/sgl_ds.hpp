@@ -2,12 +2,16 @@
 
 #include "sglad.h"
 #include <vector>
+#include "sgl_vertex_shader.hpp"
+#include "sgl_fragment_shader.hpp"
 
 namespace sgl {
 	struct Color {
 		union {
 			struct { float r, g, b, a; };
 		};
+
+		// todo: default constructor
 	};
 
 	struct ColorBuffer {
@@ -50,5 +54,16 @@ namespace sgl {
 
 	struct Buffer {
 		void* data = nullptr;
+	};
+
+	struct GpuProgram {
+		sgl::VertexShaderBase* vertexShader;
+		sgl::FragmentShaderBase* fragShader;
+
+		GpuProgram(sgl::VertexShaderBase* vertexShader, sgl::FragmentShaderBase* fragShader) : vertexShader(vertexShader), fragShader(fragShader) {}
+	};
+
+	struct TrianglePrimitive {
+
 	};
 }

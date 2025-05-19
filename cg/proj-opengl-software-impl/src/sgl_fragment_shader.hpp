@@ -6,7 +6,7 @@
 
 namespace sgl {
 	class FragmentShaderBase : public ShaderBase {
-	protected:
+	public:
 		virtual void Init() = 0;
 		virtual void MainFunc() = 0;
 
