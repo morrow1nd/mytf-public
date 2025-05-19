@@ -25,6 +25,7 @@ protected:
 
         const glm::vec3& aPos = GetInVec3(inaPosId);
 
+        // MVP矩阵的计算可以挪到app阶段
         gl_Position = projection * view * model * glm::vec4(aPos, 1.0f);
 
         const glm::vec2 aTexCoord = GetInVec2(inaTexCoordId);
@@ -33,14 +34,14 @@ protected:
     }
 
 private:
-    int uniformModelIndex;
-    int uniformViewIndex;
-    int uniformProjectionIndex;
+    int uniformModelIndex = 0;
+    int uniformViewIndex = 0;
+    int uniformProjectionIndex = 0;
 
-    int inaPosId;
-    int inaTexCoordId;
+    int inaPosId = 0;
+    int inaTexCoordId = 0;
 
-    int outTexCoordId;
+    int outTexCoordId = 0;
 };
 
 class AppFragmentShader : public sgl::FragmentShaderBase {
@@ -61,8 +62,8 @@ protected:
     }
 
 private:
-    int uniformTexture1Id;
-    int uniformTexture2Id;
-    int inTexCoordId;
-    //int outFragColorId;
+    int uniformTexture1Id = 0;
+    int uniformTexture2Id = 0;
+    int inTexCoordId = 0;
+    //int outFragColorId = 0;
 };

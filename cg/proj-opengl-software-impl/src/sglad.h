@@ -181,40 +181,40 @@ GLAPI PFNGLVIEWPORTPROC glad_glViewport;
 
 // shader
 
-#define GL_FRAGMENT_SHADER 0x8B30
-#define GL_VERTEX_SHADER 0x8B31
-
-#define GL_DELETE_STATUS 0x8B80
-#define GL_COMPILE_STATUS 0x8B81
-#define GL_LINK_STATUS 0x8B82
-
-typedef GLuint(APIENTRYP PFNGLCREATESHADERPROC)(GLenum type);
-GLAPI PFNGLCREATESHADERPROC glad_glCreateShader;
-#define glCreateShader glad_glCreateShader
-
-typedef void (APIENTRYP PFNGLSHADERSOURCEPROC)(GLuint shader, GLsizei count, const GLchar* const* string, const GLint* length);
-GLAPI PFNGLSHADERSOURCEPROC glad_glShaderSource;
-#define glShaderSource glad_glShaderSource
-
-typedef void (APIENTRYP PFNGLCOMPILESHADERPROC)(GLuint shader);
-GLAPI PFNGLCOMPILESHADERPROC glad_glCompileShader;
-#define glCompileShader glad_glCompileShader
-
-typedef GLuint(APIENTRYP PFNGLCREATEPROGRAMPROC)();
-GLAPI PFNGLCREATEPROGRAMPROC glad_glCreateProgram;
-#define glCreateProgram glad_glCreateProgram
-
-typedef void (APIENTRYP PFNGLATTACHSHADERPROC)(GLuint program, GLuint shader);
-GLAPI PFNGLATTACHSHADERPROC glad_glAttachShader;
-#define glAttachShader glad_glAttachShader
-
-typedef void (APIENTRYP PFNGLLINKPROGRAMPROC)(GLuint program);
-GLAPI PFNGLLINKPROGRAMPROC glad_glLinkProgram;
-#define glLinkProgram glad_glLinkProgram
-
-typedef void (APIENTRYP PFNGLDELETESHADERPROC)(GLuint shader);
-GLAPI PFNGLDELETESHADERPROC glad_glDeleteShader;
-#define glDeleteShader glad_glDeleteShader
+//#define GL_FRAGMENT_SHADER 0x8B30
+//#define GL_VERTEX_SHADER 0x8B31
+//
+//#define GL_DELETE_STATUS 0x8B80
+//#define GL_COMPILE_STATUS 0x8B81
+//#define GL_LINK_STATUS 0x8B82
+//
+//typedef GLuint(APIENTRYP PFNGLCREATESHADERPROC)(GLenum type);
+//GLAPI PFNGLCREATESHADERPROC glad_glCreateShader;
+//#define glCreateShader glad_glCreateShader
+//
+//typedef void (APIENTRYP PFNGLSHADERSOURCEPROC)(GLuint shader, GLsizei count, const GLchar* const* string, const GLint* length);
+//GLAPI PFNGLSHADERSOURCEPROC glad_glShaderSource;
+//#define glShaderSource glad_glShaderSource
+//
+//typedef void (APIENTRYP PFNGLCOMPILESHADERPROC)(GLuint shader);
+//GLAPI PFNGLCOMPILESHADERPROC glad_glCompileShader;
+//#define glCompileShader glad_glCompileShader
+//
+//typedef GLuint(APIENTRYP PFNGLCREATEPROGRAMPROC)();
+//GLAPI PFNGLCREATEPROGRAMPROC glad_glCreateProgram;
+//#define glCreateProgram glad_glCreateProgram
+//
+//typedef void (APIENTRYP PFNGLATTACHSHADERPROC)(GLuint program, GLuint shader);
+//GLAPI PFNGLATTACHSHADERPROC glad_glAttachShader;
+//#define glAttachShader glad_glAttachShader
+//
+//typedef void (APIENTRYP PFNGLLINKPROGRAMPROC)(GLuint program);
+//GLAPI PFNGLLINKPROGRAMPROC glad_glLinkProgram;
+//#define glLinkProgram glad_glLinkProgram
+//
+//typedef void (APIENTRYP PFNGLDELETESHADERPROC)(GLuint shader);
+//GLAPI PFNGLDELETESHADERPROC glad_glDeleteShader;
+//#define glDeleteShader glad_glDeleteShader
 
 typedef void (APIENTRYP PFNGLUSEPROGRAMPROC)(GLuint program);
 GLAPI PFNGLUSEPROGRAMPROC glad_glUseProgram;
@@ -232,15 +232,15 @@ typedef void (APIENTRYP PFNGLUNIFORMMATRIX4FVPROC)(GLint location, GLsizei count
 GLAPI PFNGLUNIFORMMATRIX4FVPROC glad_glUniformMatrix4fv;
 #define glUniformMatrix4fv glad_glUniformMatrix4fv
 
-typedef void (APIENTRYP PFNGLGETSHADERIVPROC)(GLuint shader, GLenum pname, GLint* params);
-GLAPI PFNGLGETSHADERIVPROC glad_glGetShaderiv;
-#define glGetShaderiv glad_glGetShaderiv
-typedef void (APIENTRYP PFNGLGETSHADERINFOLOGPROC)(GLuint shader, GLsizei bufSize, GLsizei* length, GLchar* infoLog);
-GLAPI PFNGLGETSHADERINFOLOGPROC glad_glGetShaderInfoLog;
-#define glGetShaderInfoLog glad_glGetShaderInfoLog
-typedef void (APIENTRYP PFNGLGETPROGRAMIVPROC)(GLuint program, GLenum pname, GLint* params);
-GLAPI PFNGLGETPROGRAMIVPROC glad_glGetProgramiv;
-#define glGetProgramiv glad_glGetProgramiv
-typedef void (APIENTRYP PFNGLGETPROGRAMINFOLOGPROC)(GLuint program, GLsizei bufSize, GLsizei* length, GLchar* infoLog);
-GLAPI PFNGLGETPROGRAMINFOLOGPROC glad_glGetProgramInfoLog;
-#define glGetProgramInfoLog glad_glGetProgramInfoLog
+//typedef void (APIENTRYP PFNGLGETSHADERIVPROC)(GLuint shader, GLenum pname, GLint* params);
+//GLAPI PFNGLGETSHADERIVPROC glad_glGetShaderiv;
+//#define glGetShaderiv glad_glGetShaderiv
+//typedef void (APIENTRYP PFNGLGETSHADERINFOLOGPROC)(GLuint shader, GLsizei bufSize, GLsizei* length, GLchar* infoLog);
+//GLAPI PFNGLGETSHADERINFOLOGPROC glad_glGetShaderInfoLog;
+//#define glGetShaderInfoLog glad_glGetShaderInfoLog
+//typedef void (APIENTRYP PFNGLGETPROGRAMIVPROC)(GLuint program, GLenum pname, GLint* params);
+//GLAPI PFNGLGETPROGRAMIVPROC glad_glGetProgramiv;
+//#define glGetProgramiv glad_glGetProgramiv
+//typedef void (APIENTRYP PFNGLGETPROGRAMINFOLOGPROC)(GLuint program, GLsizei bufSize, GLsizei* length, GLchar* infoLog);
+//GLAPI PFNGLGETPROGRAMINFOLOGPROC glad_glGetProgramInfoLog;
+//#define glGetProgramInfoLog glad_glGetProgramInfoLog
