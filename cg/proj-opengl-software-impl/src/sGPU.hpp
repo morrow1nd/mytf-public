@@ -3,6 +3,7 @@
 #include "sgl.hpp"
 #include "sgl_ds.hpp"
 #include "sGPU.hpp"
+#include "sgl_gpuprogram.hpp"
 
 #include <vector>
 

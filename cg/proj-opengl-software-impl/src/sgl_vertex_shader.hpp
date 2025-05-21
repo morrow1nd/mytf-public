@@ -35,6 +35,7 @@ namespace sgl
             ASSERT(attr.type == GL_FLOAT);
             ASSERT(attr.normalized == GL_FALSE); // 暂时只支持FALSE
 
+            ASSERT(this->vertexIndex >= 0);
             const char* ptr = ((const char*)VBO->data) + (int)attr.pointer + attr.stride * this->vertexIndex;
 
             return * (const glm::vec3*)ptr;
@@ -47,6 +48,7 @@ namespace sgl
             ASSERT(attr.type == GL_FLOAT);
             ASSERT(attr.normalized == GL_FALSE); // 暂时只支持FALSE
 
+            ASSERT(this->vertexIndex >= 0);
             const char* ptr = ((const char*)VBO->data) + (int)attr.pointer + attr.stride * this->vertexIndex;
 
             return *(const glm::vec2*)ptr;

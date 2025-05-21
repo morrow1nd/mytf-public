@@ -5,23 +5,24 @@
 #include "sgl_base.hpp"
 #include "sglm.hpp"
 #include "sgl_ds.hpp"
+#include "sgl_gpuprogram_runtime.hpp"
 
 namespace sgl
 {
     class ShaderRuntimeEnv
     {
-        sgl::GpuProgram* gpuProgram = nullptr;
+        sgl::GpuProgramRuntimeEnv* gpuProgramEnv = nullptr;
 
     public:
-        void SetGpuProgram(sgl::GpuProgram* gpuProgram)
+        void SetGpuProgramRuntimeEnv(sgl::GpuProgramRuntimeEnv* gpuProgramEnv)
         {
-            this->gpuProgram = gpuProgram;
+            this->gpuProgramEnv = gpuProgramEnv;
         }
 
     public:
         const glm::mat4& GetUniformMat4(int id)
         {
-            return this->gpuProgram->GetUniformMatrix4fv(id);
+            return this->gpuProgramEnv->GetUniformMatrix4fv(id);
         }
 
         glm::vec2& GetOutVec2(int id)
@@ -51,7 +52,6 @@ namespace sgl
 
     protected:
         std::unordered_map<std::string, int> name2Id;
-        int uniformDataSize = 0;
 
         int RegisterName(const std::string& name)
         {
@@ -61,7 +61,6 @@ namespace sgl
 
         int RegisterUniformMat4(const std::string& name)
         {
-            uniformDataSize += sizeof(glm::vec4);
             return RegisterName(name);
         }
 
@@ -83,12 +82,6 @@ namespace sgl
             return RegisterName(name);
         }
 
-
-        int RegisterInVec2(const std::string& name)
-        {
-            // todo
-            return RegisterName(name);
-        }
 
         int RegisterUniformSampler2D(const std::string& name)
         {

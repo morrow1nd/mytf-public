@@ -7,8 +7,9 @@
 
 namespace sgl
 {
-    struct FragmentShaderRuntimeEnv : public ShaderRuntimeEnv
+    class FragmentShaderRuntimeEnv : public ShaderRuntimeEnv
     {
+    public:
         glm::vec4 output;
     };
 

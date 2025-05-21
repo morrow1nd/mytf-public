@@ -1,6 +1,7 @@
 #include "sgl.hpp"
 #include "sgl_ds.hpp"
 #include "sGPU.hpp"
+#include "sgl_gpuprogram.hpp"
 
 #include <vector>
 
@@ -118,7 +119,7 @@ void glad_glDrawArrays(GLenum mode, GLint first, GLsizei count)
     {
         sgl::VertexShaderRuntimeEnv env;
         env.SetBuffer(VAO, VBO);
-        env.SetGpuProgram(gpuProgram);
+        env.SetGpuProgramRuntimeEnv(&gpuProgram->runtimeEnv);
         // 遍历每一个顶点
         for (int i = 0; i < count; ++i)
         {
@@ -174,7 +175,7 @@ void glad_glUseProgram(GLuint program)
 GLint glad_glGetUniformLocation(GLuint program, const GLchar* name)
 {
     auto gpuProgram = gpu.sglGpuPrograms[program];
-    return (GLint) gpuProgram->GetUniformLocation(name);
+    return (GLint) gpuProgram->runtimeEnv.GetUniformLocation(name);
 }
 
 // https://registry.khronos.org/OpenGL-Refpages/gl4/html/glUniform.xhtml
@@ -184,5 +185,5 @@ void glad_glUniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose,
 {
     ASSERT(transpose == GL_FALSE);
     auto gpuProgram = gpu.sglGpuPrograms[gpu.activeGpuProgramId];
-    gpuProgram->SetUniformMatrix4fv(location, count, value);
+    gpuProgram->runtimeEnv.SetUniformMatrix4fv(location, count, value);
 }
