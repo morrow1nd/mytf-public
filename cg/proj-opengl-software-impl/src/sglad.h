@@ -218,16 +218,14 @@ GLAPI PFNGLVIEWPORTPROC glad_glViewport;
 void glad_glUseProgram(GLuint program);
 #define glUseProgram glad_glUseProgram
 
-typedef GLint(APIENTRYP PFNGLGETUNIFORMLOCATIONPROC)(GLuint program, const GLchar* name);
-GLAPI PFNGLGETUNIFORMLOCATIONPROC glad_glGetUniformLocation;
+GLint glad_glGetUniformLocation(GLuint program, const GLchar* name);
 #define glGetUniformLocation glad_glGetUniformLocation
 
 typedef void (APIENTRYP PFNGLUNIFORM1IPROC)(GLint location, GLint v0);
 GLAPI PFNGLUNIFORM1IPROC glad_glUniform1i;
 #define glUniform1i glad_glUniform1i
 
-typedef void (APIENTRYP PFNGLUNIFORMMATRIX4FVPROC)(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value);
-GLAPI PFNGLUNIFORMMATRIX4FVPROC glad_glUniformMatrix4fv;
+void glad_glUniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value);
 #define glUniformMatrix4fv glad_glUniformMatrix4fv
 
 //typedef void (APIENTRYP PFNGLGETSHADERIVPROC)(GLuint shader, GLenum pname, GLint* params);

@@ -5,31 +5,32 @@
 
 #include "sglm.hpp"
 
-class AppVertexShader : public sgl::VertexShaderBase {
+class AppVertexShader : public sgl::VertexShaderBase
+{
 public:
-    void Init() override {
+    void Init() override
+    {
         uniformModelIndex = RegisterUniformMat4("model");
         uniformViewIndex = RegisterUniformMat4("view");
         uniformProjectionIndex = RegisterUniformMat4("projection");
 
-        inaPosId = RegisterInVec3("aPos");
-        inaTexCoordId = RegisterInVec2("aTexCoord");
-
         outTexCoordId = RegisterOutVec2("TexCoord");
     }
 
-    void MainFunc() override {
-        const glm::mat4& projection = GetUniformMat4(uniformProjectionIndex);
-        const glm::mat4& view = GetUniformMat4(uniformViewIndex);
-        const glm::mat4& model = GetUniformMat4(uniformModelIndex);
+    void MainFunc(sgl::VertexShaderRuntimeEnv& env) override
+    {
+        const glm::mat4& projection = env.GetUniformMat4(uniformProjectionIndex);
+        const glm::mat4& view = env.GetUniformMat4(uniformViewIndex);
+        const glm::mat4& model = env.GetUniformMat4(uniformModelIndex);
 
-        const glm::vec3& aPos = GetInVec3(inaPosId);
+        const glm::vec3& aPos = env.GetLayoutVec3(0);
 
         // MVP矩阵的计算可以挪到app阶段
-        gl_Position = projection * view * model * glm::vec4(aPos, 1.0f);
+        env.gl_Position = projection * view * model * glm::vec4(aPos, 1.0f);
 
-        const glm::vec2 aTexCoord = GetInVec2(inaTexCoordId);
-        glm::vec2& TexCoord = GetOutVec2(outTexCoordId);
+        const glm::vec2 aTexCoord = env.GetLayoutVec2(1);
+        glm::vec2& TexCoord = env.GetOutVec2(outTexCoordId);
+
         TexCoord = aTexCoord;
     }
 
@@ -38,15 +39,14 @@ private:
     int uniformViewIndex = 0;
     int uniformProjectionIndex = 0;
 
-    int inaPosId = 0;
-    int inaTexCoordId = 0;
-
     int outTexCoordId = 0;
 };
 
-class AppFragmentShader : public sgl::FragmentShaderBase {
+class AppFragmentShader : public sgl::FragmentShaderBase
+{
 public:
-    void Init() override {
+    void Init() override
+    {
         inTexCoordId = RegisterInVec2("TexCoord");
 
         uniformTexture1Id = RegisterUniformSampler2D("texture1");
@@ -55,10 +55,11 @@ public:
         //outFragColorId = RegisterOutVec4("FragColor");
     }
 
-    void MainFunc() override {
-        const glm::vec2 TexCoord = GetInVec2(inTexCoordId);
+    void MainFunc(sgl::FragmentShaderRuntimeEnv& env) override
+    {
+        const glm::vec2 TexCoord = env.GetInVec2(inTexCoordId);
 
-        output = glm::mix(texture(uniformTexture1Id, TexCoord), texture(uniformTexture2Id, TexCoord), 0.2f);
+        env.output = glm::mix(env.texture(uniformTexture1Id, TexCoord), env.texture(uniformTexture2Id, TexCoord), 0.2f);
     }
 
 private:

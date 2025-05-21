@@ -1,57 +1,64 @@
 #pragma once
 
 #include <string>
+#include "sgl_base.hpp"
 #include "sglm.hpp"
 #include "sgl_shader.hpp"
+#include "sgl_ds.hpp"
 
-namespace sgl {
-	class VertexShaderBase : public ShaderBase {
-	public:
-		virtual void Init() = 0;
-		virtual void MainFunc() = 0;
+namespace sgl
+{
+    class VertexShaderRuntimeEnv : public ShaderRuntimeEnv
+    {
+    private:
+        void* data = nullptr;
+        int vertexIndex = -1;
+        sgl::VertexArray* VAO = nullptr;
+        sgl::Buffer* VBO = nullptr;
+        
+    public:
+        void SetBuffer(sgl::VertexArray* VAO, sgl::Buffer* VBO)
+        {
+            this->VAO = VAO;
+            this->VBO = VBO;
+        }
 
-	protected:
-		int RegisterUniformMat4(const std::string& name) {
-			// todo
-			return 0;
-		}
+        void SetVertexIndex(int index)
+        {
+            vertexIndex = index;
+        }
 
-		const glm::mat4& GetUniformMat4(int id) {
-			// todo
-			return glm::mat4(0);
-		}
+        const glm::vec3& GetLayoutVec3(int layoutLocation)
+        {
+            const auto& attr = VAO->attribPointers[layoutLocation];
+            ASSERT(attr.size == 3, "GetLayoutVec3 fail, attr.size != 3");
+            ASSERT(attr.type == GL_FLOAT);
+            ASSERT(attr.normalized == GL_FALSE); // 暂时只支持FALSE
 
-		int RegisterInVec3(const std::string& name) {
-			// todo
-			return 0;
-		}
+            const char* ptr = ((const char*)VBO->data) + (int)attr.pointer + attr.stride * this->vertexIndex;
 
-		const glm::vec3& GetInVec3(int id) {
-			// todo
-			return glm::vec3();
-		}
+            return * (const glm::vec3*)ptr;
+        }
 
-		int RegisterInVec2(const std::string& name) {
-			// todo
-			return 0;
-		}
+        const glm::vec2& GetLayoutVec2(int layoutLocation)
+        {
+            const auto& attr = VAO->attribPointers[layoutLocation];
+            ASSERT(attr.size == 2, "GetLayoutVec2 fail, attr.size != 2");
+            ASSERT(attr.type == GL_FLOAT);
+            ASSERT(attr.normalized == GL_FALSE); // 暂时只支持FALSE
 
-		const glm::vec2& GetInVec2(int id) {
-			// todo
-			return glm::vec2();
-		}
+            const char* ptr = ((const char*)VBO->data) + (int)attr.pointer + attr.stride * this->vertexIndex;
 
-		int RegisterOutVec2(const std::string& name) {
-			// todo
-			return 0;
-		}
+            return *(const glm::vec2*)ptr;
+        }
 
-		glm::vec2& GetOutVec2(int id) {
-			// todo
-			return glm::vec2();
-		}
+        glm::vec4 gl_Position;
+    };
 
-	protected:
-		glm::vec4 gl_Position;
-	};
+    class VertexShaderBase : public ShaderBase
+    {
+    public:
+        virtual void Init() = 0;
+        virtual void MainFunc(VertexShaderRuntimeEnv& env) = 0;
+    };
 }
