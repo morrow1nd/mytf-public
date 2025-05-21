@@ -14,13 +14,14 @@ namespace sgl
         sgl::FragmentShaderBase* fragShader;
         GpuProgramRuntimeEnv runtimeEnv;
 
-        GpuProgram(sgl::VertexShaderBase* vertexShader, sgl::FragmentShaderBase* fragShader) : vertexShader(vertexShader), fragShader(fragShader)
+        GpuProgram(sgl::VertexShaderBase* vertexShader, sgl::FragmentShaderBase* fragShader)
+            : vertexShader(vertexShader), fragShader(fragShader)
         {
             vertexShader->Init();
             fragShader->Init();
 
-            runtimeEnv.AddNames(vertexShader->GetName2Id());
-            runtimeEnv.AddNames(fragShader->GetName2Id());
+            runtimeEnv.AddUniformNames(vertexShader->GetUniformName2Id());
+            runtimeEnv.AddUniformNames(fragShader->GetUniformName2Id());
         }
     };
 }

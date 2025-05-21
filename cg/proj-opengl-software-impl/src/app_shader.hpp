@@ -14,7 +14,7 @@ public:
         uniformViewIndex = RegisterUniformMat4("view");
         uniformProjectionIndex = RegisterUniformMat4("projection");
 
-        outTexCoordId = RegisterOutVec2("TexCoord");
+        outTexCoordId = RegisterOutVec2("TexCoord"); // todo
     }
 
     void MainFunc(sgl::VertexShaderRuntimeEnv& env) override
@@ -47,24 +47,25 @@ class AppFragmentShader : public sgl::FragmentShaderBase
 public:
     void Init() override
     {
-        inTexCoordId = RegisterInVec2("TexCoord");
+        inTexCoordId = RegisterInVec2("TexCoord"); // todo
 
-        uniformTexture1Id = RegisterUniformSampler2D("texture1");
+        uniformTexture1Id = RegisterUniformSampler2D("texture1"); // todo
         uniformTexture2Id = RegisterUniformSampler2D("texture2");
 
-        //outFragColorId = RegisterOutVec4("FragColor");
+        outFragColorId = RegisterOutVec4("FragColor");
     }
 
     void MainFunc(sgl::FragmentShaderRuntimeEnv& env) override
     {
         const glm::vec2 TexCoord = env.GetInVec2(inTexCoordId);
 
-        env.output = glm::mix(env.texture(uniformTexture1Id, TexCoord), env.texture(uniformTexture2Id, TexCoord), 0.2f);
+        glm::vec4& fragColor = env.GetOutVec4(outFragColorId);
+        fragColor = glm::mix(env.texture(uniformTexture1Id, TexCoord), env.texture(uniformTexture2Id, TexCoord), 0.2f);
     }
 
 private:
     int uniformTexture1Id = 0;
     int uniformTexture2Id = 0;
     int inTexCoordId = 0;
-    //int outFragColorId = 0;
+    int outFragColorId = 0;
 };

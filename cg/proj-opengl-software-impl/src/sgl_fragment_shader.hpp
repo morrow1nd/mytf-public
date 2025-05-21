@@ -10,7 +10,6 @@ namespace sgl
     class FragmentShaderRuntimeEnv : public ShaderRuntimeEnv
     {
     public:
-        glm::vec4 output;
     };
 
     class FragmentShaderBase : public ShaderBase

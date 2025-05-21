@@ -11,6 +11,7 @@ namespace sgl
 {
     class ShaderRuntimeEnv
     {
+    protected:
         sgl::GpuProgramRuntimeEnv* gpuProgramEnv = nullptr;
 
     public:
@@ -25,10 +26,10 @@ namespace sgl
             return this->gpuProgramEnv->GetUniformMatrix4fv(id);
         }
 
-        glm::vec2& GetOutVec2(int id)
+        glm::vec4 texture(int id, const glm::vec2& texCoord)
         {
             // todo
-            return glm::vec2();
+            return glm::vec4();
         }
 
 
@@ -38,7 +39,7 @@ namespace sgl
             return glm::vec2();
         }
 
-        glm::vec4 texture(int id, const glm::vec2& texCoord)
+        glm::vec4& GetOutVec4(int id)
         {
             // todo
             return glm::vec4();
@@ -48,20 +49,28 @@ namespace sgl
     class ShaderBase
     {
     public:
-        std::unordered_map<std::string, int>& GetName2Id() { return name2Id; }
+        const std::unordered_map<std::string, int>& GetName2Id() { return name2Id; }
+        const std::unordered_map<std::string, int>& GetUniformName2Id() { return uniformName2Id; }
 
     protected:
         std::unordered_map<std::string, int> name2Id;
+        std::unordered_map<std::string, int> uniformName2Id;
 
         int RegisterName(const std::string& name)
         {
+            auto it = name2Id.find(name);
+            if (it != name2Id.end())
+                return it->second;
+
             static int sId = 0;
             return name2Id[name] = ++sId;
         }
 
         int RegisterUniformMat4(const std::string& name)
         {
-            return RegisterName(name);
+            int id = RegisterName(name);
+            uniformName2Id[name] = id;
+            return id;
         }
 
         int RegisterInVec3(const std::string& name)
@@ -76,12 +85,12 @@ namespace sgl
             return RegisterName(name);
         }
 
-        int RegisterOutVec2(const std::string& name)
+
+        int RegisterOutVec4(const std::string& name)
         {
             // todo
             return RegisterName(name);
         }
-
 
         int RegisterUniformSampler2D(const std::string& name)
         {

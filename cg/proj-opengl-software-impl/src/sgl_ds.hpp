@@ -62,6 +62,14 @@ namespace sgl
         std::vector<VertexAttribPointer> attribPointers;
     };
 
+    struct LayoutDataType
+    {
+        GLenum dataType;
+        int sizeofDataType;
+        int size;
+        int arraySize = 0; // 0: not array
+    };
+
     struct Buffer
     {
         void* data = nullptr;
