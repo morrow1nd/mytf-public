@@ -1,7 +1,8 @@
 https://weread.qq.com/web/reader/73e32b1071f8250273ec97a#outline?noScroll=1
-https://book.douban.com/subject/10541097/
-https://book.douban.com/subject/30426701/
-https://book.douban.com/subject/35755152/
+
+豆瓣 Introduction to 3D Game Programming with DirectX 11 https://book.douban.com/subject/10541097/
+豆瓣 DirectX 12 3D 游戏开发实战 https://book.douban.com/subject/30426701/
+豆瓣 Fundamentals of Computer Graphics, 5th Edition https://book.douban.com/subject/35755152/
 https://book.douban.com/subject/4306242/
 https://book.douban.com/subject/26220248/
 https://www.douban.com/doulist/1445744/
